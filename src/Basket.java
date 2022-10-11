@@ -67,6 +67,22 @@ public class Basket {
         }
     }
 
+    public void saveBin(File textFile) throws Exception {
+        try
+                (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(textFile))) {
+            out.writeObject(this);
+        }
+    }
+
+    public static Basket loadFromBinFile(File textFile) throws Exception {
+        try
+                (ObjectInputStream in = new ObjectInputStream(new FileInputStream(textFile))) {
+            Basket basket = (Basket) in.readObject();
+            return basket;
+        }
+
+    }
+
     public String[] getProducts() {
         return products;
     }
