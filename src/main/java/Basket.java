@@ -1,3 +1,6 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.*;
 
 public class Basket {
@@ -80,7 +83,29 @@ public class Basket {
             Basket basket = (Basket) in.readObject();
             return basket;
         }
+    }
 
+    public void saveJson(File jsonFile) throws IOException {
+        try (FileWriter file = new FileWriter(jsonFile, false)) {
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
+            file.write(gson.toJson(this));
+        }
+    }
+
+    public static Basket loadFromJson(File jsonFile) throws IOException {
+        if (jsonFile.exists()) {
+            try (FileReader fileLoad = new FileReader(jsonFile)) {
+                GsonBuilder builder = new GsonBuilder();
+                Gson gson = builder.create();
+                return gson.fromJson(fileLoad, Basket.class);
+            }
+        } else {
+            String[] products = {"Хлеб", "Яблоки", "Молоко"};
+            int[] prices = {100, 200, 300};
+            Basket basket = new Basket(products, prices);
+            return basket;
+        }
     }
 
     public String[] getProducts() {
